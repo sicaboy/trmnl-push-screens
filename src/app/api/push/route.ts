@@ -85,12 +85,12 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    if (!response.ok) {
-      const errorText = await response.text();
+    if (!response || !response.ok) {
+      const errorText = response ? await response.text() : lastError || 'No response received';
       return NextResponse.json(
         { 
           error: 'Failed to push markup to TRMNL API',
-          status: response.status,
+          status: response?.status || 500,
           details: errorText
         },
         { status: 500 }
