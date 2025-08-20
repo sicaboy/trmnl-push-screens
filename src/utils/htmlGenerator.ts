@@ -194,7 +194,7 @@ function getLunarInfo(date: Date): { dayName: string; solarTerm?: string } {
   };
 }
 
-function generateCalendarHTML(): string {
+export function generateCalendarHTML(): string {
   const now = new Date();
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();
