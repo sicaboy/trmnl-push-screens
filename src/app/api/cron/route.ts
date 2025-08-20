@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
       'Authorization': `Bearer ${bearerToken}`,
     };
 
-    console.log('Cron Job: Pushing calendar to device', deviceId, 'at', new Date().toISOString(), '(hourly update)');
+    console.log('Cron Job: Pushing calendar to device', deviceId, 'at', new Date().toISOString(), '(daily update)');
 
     const response = await fetch(fullUrl, {
       method: 'POST',
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest) {
     }
 
     const result = await response.text();
-    console.log('Cron Job: Successfully pushed calendar to device', deviceId, '(hourly update)');
+    console.log('Cron Job: Successfully pushed calendar to device', deviceId, '(daily update)');
     
     return NextResponse.json({
       success: true,
