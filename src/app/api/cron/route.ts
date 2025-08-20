@@ -2,18 +2,23 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   try {
-    // Optional cron secret verification
-    const cronSecret = process.env.CRON_SECRET;
-    if (cronSecret) {
-      const authHeader = request.headers.get('Authorization');
-      const providedSecret = authHeader?.replace('Bearer ', '');
-      
-      if (providedSecret !== cronSecret) {
-        console.log('Cron job unauthorized - invalid secret');
-        return NextResponse.json(
-          { error: 'Unauthorized' },
-          { status: 401 }
-        );
+    // Optional cron secret verification (skip for Vercel cron jobs)
+    const userAgent = request.headers.get('User-Agent') || '';
+    const isVercelCron = userAgent.includes('vercel') || userAgent.includes('Vercel');
+    
+    if (!isVercelCron) {
+      const cronSecret = process.env.CRON_SECRET;
+      if (cronSecret) {
+        const authHeader = request.headers.get('Authorization');
+        const providedSecret = authHeader?.replace('Bearer ', '');
+        
+        if (providedSecret !== cronSecret) {
+          console.log('Cron job unauthorized - invalid secret');
+          return NextResponse.json(
+            { error: 'Unauthorized' },
+            { status: 401 }
+          );
+        }
       }
     }
 
