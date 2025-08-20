@@ -42,13 +42,48 @@ export async function POST(request: NextRequest) {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${bearerToken}`,
+      'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'Accept': 'application/json, */*',
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache',
     };
 
-    const response = await fetch(fullUrl, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ markup }),
-    });
+    // Retry logic to handle Cloudflare blocking
+    let response;
+    let lastError;
+    
+    for (let attempt = 1; attempt <= 3; attempt++) {
+      try {
+        console.log(`Push attempt ${attempt}/3 to ${fullUrl}`);
+        
+        if (attempt > 1) {
+          // Wait before retry (exponential backoff)
+          await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt - 1) * 1000));
+        }
+        
+        response = await fetch(fullUrl, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({ markup }),
+        });
+        
+        if (response.ok) {
+          break; // Success, exit retry loop
+        } else if (response.status === 403 && attempt < 3) {
+          console.log(`Got 403 on attempt ${attempt}, retrying...`);
+          lastError = await response.text();
+          continue;
+        } else {
+          break; // Other error or last attempt
+        }
+      } catch (error) {
+        console.log(`Network error on attempt ${attempt}:`, error);
+        lastError = error instanceof Error ? error.message : 'Network error';
+        if (attempt === 3) {
+          throw error;
+        }
+      }
+    }
 
     if (!response.ok) {
       const errorText = await response.text();
