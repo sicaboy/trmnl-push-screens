@@ -1,3 +1,5 @@
+import { LunarCalendar } from './lunarCalendar';
+
 export interface PluginData {
   title?: string;
   data: Record<string, unknown>;
@@ -208,31 +210,56 @@ function generateCalendarHTML(): string {
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
   const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
 
-  // 获取农历年份信息（简化）
-  const lunarYear = `甲辰 龙年`; // 简化显示
+  // 获取实际农历信息
+  const currentLunar = LunarCalendar.solarToLunar(now);
 
-  const dayHeaders = weekDays
-    .map((day, index) => `<div class="calendar-day-header ${index === 0 || index === 6 ? 'weekend' : ''}">${day}</div>`)
-    .join('');
+  let html = `
+    <div style="padding: 12px; height: 100%; display: flex; flex-direction: column;">
+      <div style="text-align: center; margin-bottom: 12px;">
+        <h1 style="font-size: 24px; font-weight: bold; color: black; margin-bottom: 4px;">
+          ${currentYear}年 ${monthNames[currentMonth]}
+        </h1>
+        <div style="font-size: 18px; color: #666;">
+          ${currentLunar.yearName}
+        </div>
+      </div>
+      
+      <div style="flex: 1;">
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; border-right: 1px solid #666;">
+  `;
 
-  let daysHTML = '';
-  
+  // 星期标题
+  weekDays.forEach((day, index) => {
+    const isWeekend = index === 0 || index === 6;
+    html += `
+      <div style="height: 32px; width: 100%; border-top: 1px solid #666; border-left: 1px solid #666; background-color: #e5e5e5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: ${isWeekend ? '#d32f2f' : 'black'};">
+        ${day}
+      </div>
+    `;
+  });
+
+  html += '</div><div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; border-bottom: 1px solid #666; border-right: 1px solid #666;">';
+
   // 空白格子
   for (let i = 0; i < firstDayOfMonth; i++) {
-    daysHTML += '<div class="calendar-day empty"></div>';
+    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; background-color: white;"></div>`;
   }
 
   // 日期格子
   for (let day = 1; day <= daysInMonth; day++) {
     const currentDate = new Date(currentYear, currentMonth, day);
-    const lunar = getLunarInfo(currentDate);
+    const lunar = LunarCalendar.solarToLunar(currentDate);
+    const solarTerm = LunarCalendar.getSolarTerm(currentDate);
     const isToday = day === today;
-    const isSpecial = lunar.dayName === '初一' || lunar.solarTerm;
+    const isSpecial = lunar.dayName === '初一' || solarTerm;
     
-    daysHTML += `
-      <div class="calendar-day${isToday ? ' today' : ''}">
-        <div class="solar-date">${day}</div>
-        <div class="lunar-date${isSpecial ? ' special' : ''}">${lunar.solarTerm || lunar.dayName}</div>
+    // 如果是初一，显示月份名称（与预览页面逻辑一致）
+    const displayText = solarTerm || (lunar.dayName === '初一' ? lunar.monthName : lunar.dayName);
+    
+    html += `
+      <div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isToday ? 'background-color: #333; color: white;' : 'background-color: white; color: black;'} display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px;">
+        <div style="font-size: 18px; font-weight: bold; line-height: 1;">${day}</div>
+        <div style="font-size: 14px; line-height: 1; margin-top: 2px; text-align: center; color: ${isToday ? '#ccc' : (isSpecial ? '#d32f2f' : '#666')}; ${isSpecial && !isToday ? 'font-weight: bold;' : ''}">${displayText}</div>
       </div>
     `;
   }
@@ -241,17 +268,14 @@ function generateCalendarHTML(): string {
   const totalCells = 42;
   const currentCells = firstDayOfMonth + daysInMonth;
   for (let i = currentCells; i < totalCells; i++) {
-    daysHTML += '<div class="calendar-day empty"></div>';
+    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; background-color: white;"></div>`;
   }
 
-  return `
-    <div class="calendar-header">
-      <h1 class="calendar-title">${currentYear}年 ${monthNames[currentMonth]}</h1>
-      <div class="lunar-year">${lunarYear}</div>
-    </div>
-    <div class="calendar-grid">
-      ${dayHeaders}
-      ${daysHTML}
+  html += `
+        </div>
+      </div>
     </div>
   `;
+
+  return html;
 }

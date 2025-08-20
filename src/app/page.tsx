@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import EInkDisplay, { type EInkDisplayRef } from '@/components/EInkDisplay';
 import { plugins, type PluginKey } from '@/plugins';
 import { generateEInkHTML, type PluginData } from '@/utils/htmlGenerator';
@@ -11,6 +12,7 @@ export default function Home() {
   const [deviceId, setDeviceId] = useState(process.env.NEXT_PUBLIC_TRMNL_DEFAULT_DEVICE_ID || '1');
   const [showHTMLPreview, setShowHTMLPreview] = useState(false);
   const [generatedHTML, setGeneratedHTML] = useState('');
+  const [previewHTML, setPreviewHTML] = useState('');
 
   const displayRef = useRef<EInkDisplayRef>(null);
   const SelectedComponent = plugins[selectedPlugin];
@@ -22,8 +24,20 @@ export default function Home() {
     };
     const html = generateEInkHTML(selectedPlugin, pluginData);
     setGeneratedHTML(html);
+    setPreviewHTML(html);
     setShowHTMLPreview(true);
   };
+
+  // 页面加载时自动生成预览
+  useEffect(() => {
+    const pluginData: PluginData = {
+      title: selectedPlugin,
+      data: {},
+    };
+    const html = generateEInkHTML(selectedPlugin, pluginData);
+    setGeneratedHTML(html);
+    setPreviewHTML(html);
+  }, [selectedPlugin]);
 
   const copyHTMLToClipboard = async () => {
     try {
@@ -86,17 +100,33 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-6 text-gray-900 [color-scheme:light]">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">E-Ink Display Generator</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-gray-800">E-Ink Display Generator</h1>
         
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           <div className="xl:col-span-2">
             <h2 className="text-xl font-semibold mb-4 text-gray-700">Preview (800x480)</h2>
             <div className="border-2 border-gray-300 rounded-lg overflow-hidden bg-white shadow-lg">
-              <EInkDisplay ref={displayRef}>
-                <SelectedComponent />
-              </EInkDisplay>
+              {previewHTML ? (
+                <iframe
+                  srcDoc={previewHTML}
+                  width="800"
+                  height="480"
+                  style={{
+                    width: '800px',
+                    height: '480px',
+                    border: 'none',
+                    display: 'block',
+                    margin: '0 auto'
+                  }}
+                  title="E-Ink Display Preview"
+                />
+              ) : (
+                <EInkDisplay ref={displayRef}>
+                  <SelectedComponent />
+                </EInkDisplay>
+              )}
             </div>
           </div>
           

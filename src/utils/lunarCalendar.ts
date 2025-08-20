@@ -160,15 +160,15 @@ export class LunarCalendar {
     
     // 简化的节气日期映射 (实际应该根据精确算法计算)
     const termDates = [
-      [4, 19], [2, 19], [3, 6], [3, 21], [4, 5], [4, 20], // 春
+      [2, 4], [2, 19], [3, 6], [3, 21], [4, 5], [4, 20], // 春
       [5, 6], [5, 21], [6, 6], [6, 21], [7, 7], [7, 23], // 夏
-      [8, 8], [8, 23], [9, 8], [9, 23], [10, 8], [10, 23], // 秋
+      [8, 7], [8, 23], [9, 8], [9, 23], [10, 8], [10, 23], // 秋
       [11, 7], [11, 22], [12, 7], [12, 22], [1, 6], [1, 20] // 冬
     ];
 
     for (let i = 0; i < termDates.length; i++) {
       const [termMonth, termDay] = termDates[i];
-      if (month + 1 === termMonth && Math.abs(day - termDay) <= 1) {
+      if (month + 1 === termMonth && day === termDay) {
         return this.solarTerms[i];
       }
     }

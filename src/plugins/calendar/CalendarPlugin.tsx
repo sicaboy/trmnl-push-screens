@@ -31,7 +31,7 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
     // Empty cells for days before the first day of the month
     for (let i = 0; i < firstDayOfMonth; i++) {
       days.push(
-        <div key={`empty-${i}`} className={`h-12 border-t border-l border-b-0 border-r-0 border-gray-400 bg-white ${i % 7 === 6 ? 'border-r' : ''}`}></div>
+        <div key={`empty-${i}`} className={`h-12 border-t border-l bg-white ${i % 7 === 6 ? 'border-r border-gray-400' : ''} border-gray-400`}></div>
       );
     }
 
@@ -45,19 +45,22 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
       // 特殊日期判断
       const isSpecialDay = lunar.dayName === '初一' || solarTerm;
       
+      // 如果是初一，显示月份名称
+      const displayText = solarTerm || (lunar.dayName === '初一' ? lunar.monthName : lunar.dayName);
+      
       days.push(
         <div
           key={day}
-          className={`h-12 border-t border-l border-b-0 border-r-0 border-gray-400 flex flex-col items-center justify-center p-1 ${
+          className={`h-12 border-t border-l flex flex-col items-center justify-center p-1 ${
             isToday ? 'bg-gray-800 text-white' : 'bg-white text-black'
-          } ${(firstDayOfMonth + day - 1) % 7 === 6 ? 'border-r' : ''}`}
+          } ${(firstDayOfMonth + day - 1) % 7 === 6 ? 'border-r border-gray-400' : ''} border-gray-400`}
         >
-          <div className="text-sm font-bold leading-none">{day}</div>
-          <div className={`text-xs leading-none mt-1 text-center ${
+          <div className="text-lg font-bold leading-none">{day}</div>
+          <div className={`text-sm leading-none mt-1 text-center ${
             isToday ? 'text-gray-200' : 
             isSpecialDay ? 'text-red-600 font-medium' : 'text-gray-600'
           }`}>
-            {solarTerm || lunar.dayName}
+            {displayText}
           </div>
         </div>
       );
@@ -68,7 +71,7 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
     const currentCells = firstDayOfMonth + daysInMonth;
     for (let i = currentCells; i < totalCells; i++) {
       days.push(
-        <div key={`trailing-${i}`} className={`h-12 border-t border-l border-b-0 border-r-0 border-gray-400 bg-white ${(i) % 7 === 6 ? 'border-r' : ''}`}></div>
+        <div key={`trailing-${i}`} className={`h-12 border-t border-l bg-white ${(i) % 7 === 6 ? 'border-r border-gray-400' : ''} border-gray-400`}></div>
       );
     }
 
@@ -78,26 +81,26 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
   return (
     <div className={`p-3 h-full flex flex-col ${className}`}>
       <div className="text-center mb-3">
-        <h1 className="text-lg font-bold text-black mb-1">
+        <h1 className="text-3xl font-bold text-black mb-1">
           {currentYear}年 {monthNames[currentMonth]}
         </h1>
-        <div className="text-xs text-gray-600">
+        <div className="text-lg text-gray-600">
           {currentLunar.yearName} {currentLunar.monthName}
         </div>
       </div>
       
       <div className="flex flex-col">
-        <div className="grid grid-cols-7 gap-0">
+        <div className="grid grid-cols-7 gap-0 border-r border-gray-400">
           {weekDays.map((day, index) => (
-            <div key={day} className={`h-8 w-full border-t border-l border-b-0 border-r-0 border-gray-400 bg-gray-200 flex items-center justify-center text-xs font-bold text-black ${
+            <div key={day} className={`h-8 w-full border-t border-l bg-gray-200 flex items-center justify-center text-sm font-bold text-black ${
               index === 0 || index === 6 ? 'text-red-600' : ''
-            } ${index === 6 ? 'border-r' : ''}`}>
+            } ${index === 6 ? 'border-r border-gray-400' : ''} border-gray-400`}>
               {day}
             </div>
           ))}
         </div>
         
-        <div className="grid grid-cols-7 gap-0 border-b border-gray-400">
+        <div className="grid grid-cols-7 gap-0 border-b border-r border-gray-400">
           {renderCalendarDays()}
         </div>
       </div>
