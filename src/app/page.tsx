@@ -8,9 +8,7 @@ import { generateEInkHTML, type PluginData } from '@/utils/htmlGenerator';
 export default function Home() {
   const [selectedPlugin, setSelectedPlugin] = useState<PluginKey>('calendar');
   const [isLoading, setIsLoading] = useState(false);
-  const [baseUrl, setBaseUrl] = useState(process.env.NEXT_PUBLIC_TRMNL_BASE_URL || 'https://trmnl.slj.me/api/display/update');
   const [deviceId, setDeviceId] = useState(process.env.NEXT_PUBLIC_TRMNL_DEFAULT_DEVICE_ID || '1');
-  const [bearerToken, setBearerToken] = useState(process.env.NEXT_PUBLIC_TRMNL_BEARER_TOKEN || '');
   const [showHTMLPreview, setShowHTMLPreview] = useState(false);
   const [generatedHTML, setGeneratedHTML] = useState('');
 
@@ -50,13 +48,8 @@ export default function Home() {
   };
 
   const handlePushHTML = async () => {
-    if (!baseUrl.trim() || !deviceId.trim()) {
-      alert('Please enter base URL and device ID');
-      return;
-    }
-
-    if (!bearerToken.trim()) {
-      alert('Please enter bearer token');
+    if (!deviceId.trim()) {
+      alert('Please enter device ID');
       return;
     }
 
@@ -67,16 +60,13 @@ export default function Home() {
 
     setIsLoading(true);
     try {
-      const fullUrl = `${baseUrl}?device_id=${deviceId}`;
-      
       const response = await fetch('/api/push', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          url: fullUrl,
-          token: bearerToken,
+          deviceId: deviceId,
           markup: generatedHTML,
         }),
       });
@@ -180,16 +170,6 @@ export default function Home() {
               <h2 className="text-lg font-semibold mb-4 text-gray-700">TRMNL Configuration</h2>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Base URL</label>
-                  <input
-                    type="url"
-                    value={baseUrl}
-                    onChange={(e) => setBaseUrl(e.target.value)}
-                    placeholder="https://trmnl.slj.me/api/display/update"
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-white text-sm"
-                  />
-                </div>
-                <div>
                   <label className="block text-sm font-medium mb-2 text-gray-600">Device ID</label>
                   <input
                     type="text"
@@ -197,16 +177,6 @@ export default function Home() {
                     onChange={(e) => setDeviceId(e.target.value)}
                     placeholder="1"
                     className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-white"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2 text-gray-600">Bearer Token</label>
-                  <input
-                    type="password"
-                    value={bearerToken}
-                    onChange={(e) => setBearerToken(e.target.value)}
-                    placeholder="3|nFufuQ3Wc4IurBnf4DBRlZTOZvus8a3JZhir9Uk2..."
-                    className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 bg-white text-sm"
                   />
                 </div>
                 <button
@@ -223,10 +193,8 @@ export default function Home() {
                 )}
                 
                 <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded-md border">
-                  <p className="font-medium mb-1 text-gray-600">API Format:</p>
-                  <p className="font-mono">POST {baseUrl}?device_id={deviceId}</p>
-                  <p className="font-mono">Authorization: Bearer [token]</p>
-                  <p className="font-mono">Body: {`{"markup":"<html>..."}`}</p>
+                  <p className="font-medium mb-1 text-gray-600">Note:</p>
+                  <p>Base URL and Bearer Token are configured via environment variables</p>
                 </div>
               </div>
             </div>
