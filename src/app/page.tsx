@@ -85,7 +85,7 @@ export default function Home() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const result = await response.json();
+      await response.json();
       alert('HTML pushed successfully!');
     } catch (error) {
       console.error('Error pushing HTML:', error);

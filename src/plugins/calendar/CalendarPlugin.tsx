@@ -4,7 +4,7 @@ import React from 'react';
 import { withEInkOptimization, type BasePluginProps } from '@/components/BasePlugin';
 import { LunarCalendar } from '@/utils/lunarCalendar';
 
-interface CalendarPluginProps extends BasePluginProps {}
+type CalendarPluginProps = BasePluginProps;
 
 function CalendarPlugin({ className = '' }: CalendarPluginProps) {
   const now = new Date();

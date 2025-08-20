@@ -1,6 +1,6 @@
 export interface PluginData {
   title?: string;
-  data: any;
+  data: Record<string, unknown>;
 }
 
 export function generateEInkHTML(pluginKey: string, pluginData: PluginData): string {
@@ -155,10 +155,10 @@ export function generateEInkHTML(pluginKey: string, pluginData: PluginData): str
   `.trim();
 }
 
-function generatePluginHTML(pluginKey: string, pluginData: PluginData): string {
+function generatePluginHTML(pluginKey: string, _pluginData: PluginData): string {
   switch (pluginKey) {
     case 'calendar':
-      return generateCalendarHTML(pluginData.data);
+      return generateCalendarHTML();
     default:
       return '<div>Unknown plugin</div>';
   }
@@ -192,7 +192,7 @@ function getLunarInfo(date: Date): { dayName: string; solarTerm?: string } {
   };
 }
 
-function generateCalendarHTML(data?: any): string {
+function generateCalendarHTML(): string {
   const now = new Date();
   const currentMonth = now.getMonth();
   const currentYear = now.getFullYear();

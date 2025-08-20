@@ -104,7 +104,7 @@ export class LunarCalendar {
       lunarYear++;
     }
 
-    let leap = this.getLeapMonth(lunarYear);
+    const leap = this.getLeapMonth(lunarYear);
     let isLeap = false;
     
     // 计算农历月
