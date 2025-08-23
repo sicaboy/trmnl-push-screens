@@ -218,11 +218,11 @@ export function generateCalendarHTML(): string {
   let html = `
     <div style="padding: 12px; height: 100%; display: flex; flex-direction: column;">
       <div style="text-align: center; margin-bottom: 12px;">
-        <h1 style="font-size: 24px; font-weight: bold; color: black; margin-bottom: 4px;">
-          ${currentYear}年 ${monthNames[currentMonth]}
+        <h1 style="font-size: 20px; font-weight: bold; color: black; margin-bottom: 4px;">
+          今天是${currentMonth + 1}月${today}日，农历${currentLunar.monthName}${currentLunar.dayName}
         </h1>
-        <div style="font-size: 18px; color: #666;">
-          ${currentLunar.yearName}
+        <div style="font-size: 16px; color: #666;">
+          ${currentYear}年 ${monthNames[currentMonth]} · ${currentLunar.yearName}
         </div>
       </div>
       

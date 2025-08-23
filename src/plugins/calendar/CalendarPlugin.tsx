@@ -83,11 +83,11 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
   return (
     <div className={`p-3 h-full flex flex-col ${className}`}>
       <div className="text-center mb-3">
-        <h1 className="text-3xl font-bold text-black mb-1">
-          {currentYear}年 {monthNames[currentMonth]}
+        <h1 className="text-2xl font-bold text-black mb-1">
+          今天是{currentMonth + 1}月{today}日，农历{currentLunar.monthName}{currentLunar.dayName}
         </h1>
-        <div className="text-lg text-gray-600">
-          {currentLunar.yearName} {currentLunar.monthName}
+        <div className="text-base text-gray-600">
+          {currentYear}年 {monthNames[currentMonth]} · {currentLunar.yearName}
         </div>
       </div>
       
