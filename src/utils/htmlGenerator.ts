@@ -229,8 +229,9 @@ export function generateCalendarHTML(): string {
   // 星期标题
   weekDays.forEach((day, index) => {
     const isWeekend = index === 5 || index === 6;
+    const isLastColumn = index === 6;
     html += `
-      <div style="height: 32px; width: 100%; border-top: 1px solid #666; border-left: 1px solid #666; background-color: #e5e5e5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: ${isWeekend ? '#d32f2f' : 'black'};">
+      <div style="height: 32px; width: 100%; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} background-color: #e5e5e5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: ${isWeekend ? '#d32f2f' : 'black'};">
         ${day}
       </div>
     `;
@@ -240,7 +241,8 @@ export function generateCalendarHTML(): string {
 
   // 空白格子
   for (let i = 0; i < firstDayOfMonth; i++) {
-    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; background-color: white;"></div>`;
+    const isLastColumn = i % 7 === 6;
+    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} background-color: white;"></div>`;
   }
 
   // 日期格子
@@ -251,11 +253,15 @@ export function generateCalendarHTML(): string {
     const isToday = day === today;
     const isSpecial = lunar.dayName === '初一' || solarTerm;
     
+    // 计算当前日期在网格中的位置
+    const dayPosition = firstDayOfMonth + day - 1;
+    const isLastColumn = dayPosition % 7 === 6;
+    
     // 如果是初一，显示月份名称（与预览页面逻辑一致）
     const displayText = solarTerm || (lunar.dayName === '初一' ? lunar.monthName : lunar.dayName);
     
     html += `
-      <div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isToday ? 'background-color: #333; color: white;' : 'background-color: white; color: black;'} display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px;">
+      <div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} ${isToday ? 'background-color: #333; color: white;' : 'background-color: white; color: black;'} display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px;">
         <div style="font-size: 18px; font-weight: bold; line-height: 1;">${day}</div>
         <div style="font-size: 14px; line-height: 1; margin-top: 2px; text-align: center; color: ${isToday ? '#ccc' : (isSpecial ? '#d32f2f' : '#666')}; ${isSpecial && !isToday ? 'font-weight: bold;' : ''}">${displayText}</div>
       </div>
@@ -266,7 +272,8 @@ export function generateCalendarHTML(): string {
   const totalCells = 42;
   const currentCells = firstDayOfMonth + daysInMonth;
   for (let i = currentCells; i < totalCells; i++) {
-    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; background-color: white;"></div>`;
+    const isLastColumn = i % 7 === 6;
+    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} background-color: white;"></div>`;
   }
 
   html += `
