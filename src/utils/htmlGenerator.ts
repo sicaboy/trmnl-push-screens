@@ -218,7 +218,7 @@ export function generateCalendarHTML(): string {
           今天是${currentYear}年${currentMonth + 1}月${today}日
         </h1>
         <div style="font-size: 16px; color: #666;">
-          农历${currentLunar.yearName} ${currentLunar.monthName}${currentLunar.dayName}
+          农历${currentLunar.yearName} ${currentLunar.monthName}月${currentLunar.dayName}
         </div>
       </div>
       

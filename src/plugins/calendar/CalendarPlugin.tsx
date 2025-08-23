@@ -83,7 +83,7 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
           今天是{currentYear}年{currentMonth + 1}月{today}日
         </h1>
         <div className="text-base text-gray-600">
-          农历{currentLunar.yearName} {currentLunar.monthName}{currentLunar.dayName}
+          农历{currentLunar.yearName} {currentLunar.monthName}月{currentLunar.dayName}
         </div>
       </div>
       
