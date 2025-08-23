@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { pushToTrmnl } from '../../../utils/trmnlPush';
 
+// Force dynamic to prevent caching issues with cron jobs
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     // Optional cron secret verification (skip for Vercel cron jobs)
