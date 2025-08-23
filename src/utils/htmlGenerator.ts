@@ -200,10 +200,6 @@ export function generateCalendarHTML(): string {
   const currentYear = now.getFullYear();
   const today = now.getDate();
 
-  const monthNames = [
-    '一月', '二月', '三月', '四月', '五月', '六月',
-    '七月', '八月', '九月', '十月', '十一月', '十二月'
-  ];
   
   const weekDays = ['一', '二', '三', '四', '五', '六', '日'];
 
@@ -219,10 +215,10 @@ export function generateCalendarHTML(): string {
     <div style="padding: 12px; height: 100%; display: flex; flex-direction: column;">
       <div style="text-align: center; margin-bottom: 12px;">
         <h1 style="font-size: 20px; font-weight: bold; color: black; margin-bottom: 4px;">
-          今天是${currentMonth + 1}月${today}日，农历${currentLunar.monthName}${currentLunar.dayName}
+          今天是${currentYear}年${currentMonth + 1}月${today}日
         </h1>
         <div style="font-size: 16px; color: #666;">
-          ${currentYear}年 ${monthNames[currentMonth]} · ${currentLunar.yearName}
+          农历${currentLunar.yearName} ${currentLunar.monthName}${currentLunar.dayName}
         </div>
       </div>
       
