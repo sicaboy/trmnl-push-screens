@@ -17,16 +17,6 @@ export default function Home() {
   const displayRef = useRef<EInkDisplayRef>(null);
   const SelectedComponent = plugins[selectedPlugin];
 
-  const generatePlainHTML = () => {
-    const pluginData: PluginData = {
-      title: selectedPlugin,
-      data: {},
-    };
-    const html = generateEInkHTML(selectedPlugin, pluginData);
-    setGeneratedHTML(html);
-    setPreviewHTML(html);
-    setShowHTMLPreview(true);
-  };
 
   // 页面加载时自动生成预览
   useEffect(() => {
@@ -147,17 +137,10 @@ export default function Home() {
             </div>
 
             <div className="bg-white p-6 rounded-lg shadow-sm border">
-              <h2 className="text-lg font-semibold mb-4 text-gray-700">HTML Generation</h2>
+              <h2 className="text-lg font-semibold mb-4 text-gray-700">HTML Actions</h2>
               <div className="space-y-3">
-                <button
-                  onClick={generatePlainHTML}
-                  className="w-full bg-green-600 text-white py-3 px-4 rounded-md hover:bg-green-700 transition-colors"
-                >
-                  Generate Plain HTML
-                </button>
-                
                 {generatedHTML && (
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex gap-2">
                       <button
                         onClick={copyHTMLToClipboard}
@@ -173,16 +156,17 @@ export default function Home() {
                       </button>
                     </div>
                     
+                    <button
+                      onClick={() => setShowHTMLPreview(!showHTMLPreview)}
+                      className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors text-sm"
+                    >
+                      {showHTMLPreview ? 'Hide HTML Code' : 'Show HTML Code'}
+                    </button>
+                    
                     {showHTMLPreview && (
                       <div>
-                        <div className="flex justify-between items-center mb-2">
-                          <span className="text-sm font-medium">Generated HTML Preview:</span>
-                          <button
-                            onClick={() => setShowHTMLPreview(false)}
-                            className="text-sm text-gray-600 hover:text-gray-800"
-                          >
-                            Hide
-                          </button>
+                        <div className="mb-2">
+                          <span className="text-sm font-medium text-gray-700">Generated HTML Code:</span>
                         </div>
                         <textarea
                           value={generatedHTML}
@@ -216,11 +200,6 @@ export default function Home() {
                 >
                   {isLoading ? 'Pushing to TRMNL...' : 'Push to TRMNL Display'}
                 </button>
-                {!generatedHTML && (
-                  <p className="text-sm text-gray-500 text-center">
-                    Generate HTML first before pushing
-                  </p>
-                )}
                 
                 <div className="text-xs text-gray-500 bg-gray-50 p-3 rounded-md border">
                   <p className="font-medium mb-1 text-gray-600">Note:</p>

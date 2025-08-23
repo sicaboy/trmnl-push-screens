@@ -17,10 +17,12 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
     '七月', '八月', '九月', '十月', '十一月', '十二月'
   ];
 
-  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+  const weekDays = ['一', '二', '三', '四', '五', '六', '日'];
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const firstDayOfMonthSunday = new Date(currentYear, currentMonth, 1).getDay();
+  // Convert Sunday=0 to Monday=0 system: (Sunday-1+7)%7
+  const firstDayOfMonth = (firstDayOfMonthSunday + 6) % 7;
 
   // 获取当前月份的农历信息
   const currentLunar = LunarCalendar.solarToLunar(now);
@@ -93,7 +95,7 @@ function CalendarPlugin({ className = '' }: CalendarPluginProps) {
         <div className="grid grid-cols-7 gap-0 border-r border-gray-400">
           {weekDays.map((day, index) => (
             <div key={day} className={`h-8 w-full border-t border-l bg-gray-200 flex items-center justify-center text-sm font-bold text-black ${
-              index === 0 || index === 6 ? 'text-red-600' : ''
+              index === 5 || index === 6 ? 'text-red-600' : ''
             } ${index === 6 ? 'border-r border-gray-400' : ''} border-gray-400`}>
               {day}
             </div>

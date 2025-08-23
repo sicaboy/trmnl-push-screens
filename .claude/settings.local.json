@@ -9,7 +9,11 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(rm:*)",
-      "Bash(npm run dev:*)"
+      "Bash(npm run dev:*)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "Bash(node:*)",
+      "Bash(npx tsx:*)"
     ],
     "deny": [],
     "ask": []

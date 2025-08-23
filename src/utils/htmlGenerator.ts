@@ -205,10 +205,12 @@ export function generateCalendarHTML(): string {
     '七月', '八月', '九月', '十月', '十一月', '十二月'
   ];
   
-  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+  const weekDays = ['一', '二', '三', '四', '五', '六', '日'];
 
   const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const firstDayOfMonthSunday = new Date(currentYear, currentMonth, 1).getDay();
+  // Convert Sunday=0 to Monday=0 system: (Sunday-1+7)%7
+  const firstDayOfMonth = (firstDayOfMonthSunday + 6) % 7;
 
   // 获取实际农历信息
   const currentLunar = LunarCalendar.solarToLunar(now);
@@ -230,7 +232,7 @@ export function generateCalendarHTML(): string {
 
   // 星期标题
   weekDays.forEach((day, index) => {
-    const isWeekend = index === 0 || index === 6;
+    const isWeekend = index === 5 || index === 6;
     html += `
       <div style="height: 32px; width: 100%; border-top: 1px solid #666; border-left: 1px solid #666; background-color: #e5e5e5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: ${isWeekend ? '#d32f2f' : 'black'};">
         ${day}
