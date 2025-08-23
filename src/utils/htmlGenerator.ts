@@ -223,7 +223,7 @@ export function generateCalendarHTML(): string {
       </div>
       
       <div style="flex: 1;">
-        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; border-right: 1px solid #666;">
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0;">
   `;
 
   // 星期标题
@@ -231,18 +231,17 @@ export function generateCalendarHTML(): string {
     const isWeekend = index === 5 || index === 6;
     const isLastColumn = index === 6;
     html += `
-      <div style="height: 32px; width: 100%; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} background-color: #e5e5e5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: ${isWeekend ? '#d32f2f' : 'black'};">
+      <div style="height: 32px; width: 100%; border-top: 1px solid #666; border-left: 1px solid #666; border-right: 1px solid #666; background-color: #e5e5e5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: ${isWeekend ? '#d32f2f' : 'black'};">
         ${day}
       </div>
     `;
   });
 
-  html += '</div><div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; border-bottom: 1px solid #666; border-right: 1px solid #666;">';
+  html += '</div><div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; border-bottom: 1px solid #666;">';
 
   // 空白格子
   for (let i = 0; i < firstDayOfMonth; i++) {
-    const isLastColumn = i % 7 === 6;
-    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} background-color: white;"></div>`;
+    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; border-right: 1px solid #666; background-color: white; display: flex; align-items: center; justify-content: center;"></div>`;
   }
 
   // 日期格子
@@ -261,7 +260,7 @@ export function generateCalendarHTML(): string {
     const displayText = solarTerm || (lunar.dayName === '初一' ? lunar.monthName : lunar.dayName);
     
     html += `
-      <div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} ${isToday ? 'background-color: #333; color: white;' : 'background-color: white; color: black;'} display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px;">
+      <div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; border-right: 1px solid #666; ${isToday ? 'background-color: #333; color: white;' : 'background-color: white; color: black;'} display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4px;">
         <div style="font-size: 18px; font-weight: bold; line-height: 1;">${day}</div>
         <div style="font-size: 14px; line-height: 1; margin-top: 2px; text-align: center; color: ${isToday ? '#ccc' : (isSpecial ? '#d32f2f' : '#666')}; ${isSpecial && !isToday ? 'font-weight: bold;' : ''}">${displayText}</div>
       </div>
@@ -272,8 +271,7 @@ export function generateCalendarHTML(): string {
   const totalCells = 42;
   const currentCells = firstDayOfMonth + daysInMonth;
   for (let i = currentCells; i < totalCells; i++) {
-    const isLastColumn = i % 7 === 6;
-    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; ${isLastColumn ? 'border-right: 1px solid #666;' : ''} background-color: white;"></div>`;
+    html += `<div style="height: 48px; border-top: 1px solid #666; border-left: 1px solid #666; border-right: 1px solid #666; background-color: white; display: flex; align-items: center; justify-content: center;"></div>`;
   }
 
   html += `
