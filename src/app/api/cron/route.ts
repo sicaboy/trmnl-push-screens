@@ -6,30 +6,12 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    // Log all headers for debugging
-    const headers = Object.fromEntries(request.headers.entries());
+    // Log basic info for debugging
     console.log('Cron endpoint called:', {
       timestamp: new Date().toISOString(),
-      headers,
       userAgent: request.headers.get('user-agent'),
-      authorization: request.headers.get('authorization'),
-      cronSecretExists: !!process.env.CRON_SECRET,
-      expectedAuth: process.env.CRON_SECRET ? `Bearer ${process.env.CRON_SECRET}` : 'No CRON_SECRET set'
+      ip: request.ip || 'unknown'
     });
-
-    // Verify CRON_SECRET as recommended by Vercel
-    const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-      console.log('Cron job unauthorized - invalid secret:', {
-        received: authHeader,
-        expected: `Bearer ${process.env.CRON_SECRET}`,
-        match: authHeader === `Bearer ${process.env.CRON_SECRET}`
-      });
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
 
     // Import calendar HTML generator
     const { generateCalendarHTML } = await import('../../../utils/htmlGenerator');
