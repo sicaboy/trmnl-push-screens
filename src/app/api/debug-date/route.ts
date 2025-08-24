@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
         day: dateMatch[3]
       } : null,
       htmlLength: html.length,
-      htmlPreview: html.substring(0, 500) + '...'
+      fullHTML: html
     });
     
   } catch (error) {
