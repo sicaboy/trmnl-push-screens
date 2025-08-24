@@ -12,11 +12,11 @@ export async function GET(request: NextRequest) {
       userAgent: request.headers.get('user-agent')
     });
 
-    // Import calendar HTML generator
-    const { generateCalendarHTML } = await import('../../../utils/htmlGenerator');
+    // Import complete HTML generator
+    const { generateEInkHTML } = await import('../../../utils/htmlGenerator');
     
-    // Generate today's calendar
-    const markup = generateCalendarHTML();
+    // Generate today's calendar with complete HTML structure
+    const markup = generateEInkHTML('calendar', { title: 'calendar', data: {} });
     const deviceId = '1'; // Default device ID for cron
     
     console.log('Cron job starting:', {
