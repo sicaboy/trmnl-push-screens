@@ -253,9 +253,6 @@ export function generateCalendarHTML(): string {
     const isToday = day === today;
     const isSpecial = lunar.dayName === '初一' || solarTerm;
     
-    // 计算当前日期在网格中的位置
-    const dayPosition = firstDayOfMonth + day - 1;
-    
     // 如果是初一，显示月份名称（与预览页面逻辑一致）
     const displayText = solarTerm || (lunar.dayName === '初一' ? lunar.monthName : lunar.dayName);
     
