@@ -9,8 +9,7 @@ export async function GET(request: NextRequest) {
     // Log basic info for debugging
     console.log('Cron endpoint called:', {
       timestamp: new Date().toISOString(),
-      userAgent: request.headers.get('user-agent'),
-      ip: request.ip || 'unknown'
+      userAgent: request.headers.get('user-agent')
     });
 
     // Import calendar HTML generator
