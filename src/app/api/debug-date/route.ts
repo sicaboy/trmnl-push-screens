@@ -4,14 +4,17 @@ import { generateEInkHTML } from '../../../utils/htmlGenerator';
 export async function GET(request: NextRequest) {
   try {
     const now = new Date();
+    const timezone = process.env.CALENDAR_TIMEZONE || "Australia/Sydney";
+    const localTime = new Date(now.toLocaleString("en-US", {timeZone: timezone}));
     
     const debugInfo = {
       serverTime: now.toString(),
       utcTime: now.toISOString(),
-      localTime: now.toLocaleString(),
-      year: now.getFullYear(),
-      month: now.getMonth() + 1,
-      date: now.getDate(),
+      configuredTimezone: timezone,
+      localTime: localTime.toString(),
+      localYear: localTime.getFullYear(),
+      localMonth: localTime.getMonth() + 1,
+      localDate: localTime.getDate(),
       timestamp: now.getTime()
     };
     
