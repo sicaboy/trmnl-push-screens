@@ -197,10 +197,12 @@ function getLunarInfo(date: Date): { dayName: string; solarTerm?: string } {
 }
 
 export function generateCalendarHTML(): string {
+  // Use Australia/Sydney timezone
   const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
-  const today = now.getDate();
+  const sydneyTime = new Date(now.toLocaleString("en-US", {timeZone: "Australia/Sydney"}));
+  const currentMonth = sydneyTime.getMonth();
+  const currentYear = sydneyTime.getFullYear();
+  const today = sydneyTime.getDate();
 
   
   const weekDays = ['一', '二', '三', '四', '五', '六', '日'];
@@ -211,7 +213,7 @@ export function generateCalendarHTML(): string {
   const firstDayOfMonth = (firstDayOfMonthSunday + 6) % 7;
 
   // 获取实际农历信息
-  const currentLunar = LunarCalendar.solarToLunar(now);
+  const currentLunar = LunarCalendar.solarToLunar(sydneyTime);
 
   let html = `
     <div style="padding: 12px; height: 100%; display: flex; flex-direction: column;">
