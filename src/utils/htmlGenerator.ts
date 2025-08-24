@@ -167,34 +167,6 @@ function generatePluginHTML(pluginKey: string, pluginData: PluginData): string {
   }
 }
 
-// 简化的农历计算（用于HTML生成）
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getLunarInfo(date: Date): { dayName: string; solarTerm?: string } {
-  // 这是一个简化版本，实际使用中应该导入完整的农历计算
-  const lunarDays = [
-    "初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十",
-    "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
-    "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"
-  ];
-  
-  // 简化的农历计算 - 基于日期的模拟
-  const dayOfYear = Math.floor((date.getTime() - new Date(date.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
-  const lunarDayIndex = (dayOfYear + 10) % 30; // 简化的模拟
-  
-  // 简化的节气检测
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  let solarTerm: string | undefined;
-  
-  if ((month === 2 && day === 4) || (month === 8 && day === 7)) solarTerm = month === 2 ? "立春" : "立秋";
-  if ((month === 3 && day === 21) || (month === 9 && day === 23)) solarTerm = month === 3 ? "春分" : "秋分";
-  if ((month === 6 && day === 21) || (month === 12 && day === 22)) solarTerm = month === 6 ? "夏至" : "冬至";
-  
-  return {
-    dayName: lunarDays[lunarDayIndex],
-    solarTerm
-  };
-}
 
 export function generateCalendarHTML(): string {
   // Use configurable timezone (defaults to Australia/Sydney)

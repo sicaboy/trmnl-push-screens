@@ -1,6 +1,0 @@
-[2025-08-24 10:43:43] Starting cron trigger...
-[2025-08-24 10:43:43] HTTP Code: 401
-[2025-08-24 10:43:43] Response: {"error":"Unauthorized"}
-[2025-08-24 10:43:43] ERROR: Failed to update calendar
-[2025-08-24 10:43:43] Cron trigger completed
-
