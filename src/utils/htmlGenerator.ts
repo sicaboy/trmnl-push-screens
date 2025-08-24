@@ -157,7 +157,8 @@ export function generateEInkHTML(pluginKey: string, pluginData: PluginData): str
   `.trim();
 }
 
-function generatePluginHTML(pluginKey: string, _pluginData: PluginData): string {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function generatePluginHTML(pluginKey: string, pluginData: PluginData): string {
   switch (pluginKey) {
     case 'calendar':
       return generateCalendarHTML();
@@ -167,6 +168,7 @@ function generatePluginHTML(pluginKey: string, _pluginData: PluginData): string 
 }
 
 // 简化的农历计算（用于HTML生成）
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getLunarInfo(date: Date): { dayName: string; solarTerm?: string } {
   // 这是一个简化版本，实际使用中应该导入完整的农历计算
   const lunarDays = [
@@ -229,7 +231,6 @@ export function generateCalendarHTML(): string {
   // 星期标题
   weekDays.forEach((day, index) => {
     const isWeekend = index === 5 || index === 6;
-    const isLastColumn = index === 6;
     html += `
       <div style="height: 32px; width: 100%; border-top: 1px solid #666; border-left: 1px solid #666; border-right: 1px solid #666; background-color: #e5e5e5; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: ${isWeekend ? '#d32f2f' : 'black'};">
         ${day}
@@ -254,7 +255,6 @@ export function generateCalendarHTML(): string {
     
     // 计算当前日期在网格中的位置
     const dayPosition = firstDayOfMonth + day - 1;
-    const isLastColumn = dayPosition % 7 === 6;
     
     // 如果是初一，显示月份名称（与预览页面逻辑一致）
     const displayText = solarTerm || (lunar.dayName === '初一' ? lunar.monthName : lunar.dayName);
